@@ -1,0 +1,20 @@
+{
+  "capture_monitor_index": 1,
+  "output_monitor_index": 2,
+  "minimap_roi": {
+    "x": 30,
+    "y": 30,
+    "w": 280,
+    "h": 280
+  },
+  "current_map": "de_mirage",
+  "current_side": "T",
+  "debug_enabled": true,
+  "fps_limit": 20,
+  "detect_interval_ms": 30,
+  "zone_stable_frames": 3,
+  "lineup_stable_frames": 3,
+  "lineup_hold_seconds": 0.8,
+  "unknown_timeout_seconds": 1.2,
+  "output_fullscreen": true
+}
