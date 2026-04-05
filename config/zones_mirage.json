@@ -1,0 +1,64 @@
+{
+  "map": "de_mirage",
+  "reference_minimap": "assets/maps/de_mirage/minimap_reference.png",
+  "zones": [
+    {
+      "id": "t_spawn",
+      "name": "T Spawn",
+      "type": "polygon",
+      "points": [[30, 390], [130, 380], [150, 480], [20, 500]],
+      "priority": 100
+    },
+    {
+      "id": "top_mid",
+      "name": "Top Mid",
+      "type": "rect",
+      "rect": [180, 210, 95, 90],
+      "priority": 95
+    },
+    {
+      "id": "underpass",
+      "name": "Underpass",
+      "type": "circle",
+      "center": [250, 320],
+      "radius": 45,
+      "priority": 90
+    },
+    {
+      "id": "a_ramp",
+      "name": "A Ramp",
+      "type": "polygon",
+      "points": [[330, 330], [430, 310], [470, 380], [350, 430]],
+      "priority": 88
+    },
+    {
+      "id": "palace",
+      "name": "Palace",
+      "type": "rect",
+      "rect": [415, 250, 70, 60],
+      "priority": 87
+    },
+    {
+      "id": "b_apartments",
+      "name": "B Apartments",
+      "type": "polygon",
+      "points": [[95, 120], [180, 100], [210, 170], [130, 210]],
+      "priority": 85
+    },
+    {
+      "id": "bench",
+      "name": "Bench",
+      "type": "circle",
+      "center": [120, 60],
+      "radius": 35,
+      "priority": 84
+    },
+    {
+      "id": "market",
+      "name": "Market",
+      "type": "rect",
+      "rect": [35, 25, 80, 65],
+      "priority": 83
+    }
+  ]
+}
