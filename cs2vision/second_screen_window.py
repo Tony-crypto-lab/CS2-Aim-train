@@ -10,9 +10,10 @@ from PIL import Image, ImageDraw, ImageTk
 
 
 class SecondScreenWindow:
-    def __init__(self, monitor, logger: Any | None = None) -> None:
+    def __init__(self, monitor, logger: Any | None = None, fullscreen: bool = True) -> None:
         self.monitor = monitor
         self.logger = logger
+        self.fullscreen = fullscreen
         self.queue: Queue = Queue(maxsize=8)
         self.root: tk.Tk | None = None
         self.label: tk.Label | None = None
@@ -40,12 +41,20 @@ class SecondScreenWindow:
     def _run_tk(self) -> None:
         self.root = tk.Tk()
         self.root.title("CS2 Lineup Output")
-        self.root.overrideredirect(True)
-        self.root.attributes("-topmost", True)
         x, y = self.monitor.x, self.monitor.y
         w, h = self.monitor.width, self.monitor.height
-        self.root.geometry(f"{w}x{h}+{x}+{y}")
+        if self.fullscreen:
+            self.root.overrideredirect(True)
+            self.root.attributes("-topmost", True)
+            self.root.geometry(f"{w}x{h}+{x}+{y}")
+        else:
+            ww, hh = min(960, w), min(540, h)
+            wx = x + max(0, (w - ww) // 2)
+            wy = y + max(0, (h - hh) // 2)
+            self.root.attributes("-topmost", False)
+            self.root.geometry(f"{ww}x{hh}+{wx}+{wy}")
         self.root.configure(bg="black")
+        self.root.bind("<Escape>", lambda _e: self.stop())
 
         self.label = tk.Label(self.root, bg="black")
         self.label.pack(fill="both", expand=True)

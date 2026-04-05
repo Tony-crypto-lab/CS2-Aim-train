@@ -15,5 +15,6 @@
   "zone_stable_frames": 3,
   "lineup_stable_frames": 3,
   "lineup_hold_seconds": 0.8,
-  "unknown_timeout_seconds": 1.2
+  "unknown_timeout_seconds": 1.2,
+  "output_fullscreen": false
 }

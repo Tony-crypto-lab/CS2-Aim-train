@@ -38,6 +38,7 @@ from cs2vision.zone_matcher import ZoneMatcher
 DEFAULT_APP_CONFIG = {
     "capture_monitor_index": 1,
     "output_monitor_index": 2,
+    "output_fullscreen": False,
     "minimap_roi": {"x": 30, "y": 30, "w": 280, "h": 280},
     "current_map": "de_mirage",
     "current_side": "T",
@@ -74,7 +75,11 @@ class App:
 
         self.monitors = get_monitors()
         output_idx = min(max(1, int(self.config.get("output_monitor_index", 1))), len(self.monitors))
-        self.second_screen = SecondScreenWindow(self.monitors[output_idx - 1], logger=self.logger)
+        self.second_screen = SecondScreenWindow(
+            self.monitors[output_idx - 1],
+            logger=self.logger,
+            fullscreen=bool(self.config.get("output_fullscreen", False)),
+        )
         self.second_screen.start()
 
         self.minimap_tracker = MinimapTracker(APP_ROOT / "assets/maps/de_mirage/debug/self_icon_template.png", self.logger)
@@ -131,6 +136,9 @@ class App:
         self.debug_enabled_var = tk.BooleanVar(value=bool(self.config.get("debug_enabled", True)))
         ttk.Checkbutton(controls, text="Debug Preview", variable=self.debug_enabled_var).pack(side="left", padx=8)
 
+        self.output_fullscreen_var = tk.BooleanVar(value=bool(self.config.get("output_fullscreen", False)))
+        ttk.Checkbutton(controls, text="Output Fullscreen", variable=self.output_fullscreen_var).pack(side="left", padx=8)
+
         panes = ttk.Frame(self.root)
         panes.pack(fill="both", expand=True, padx=8, pady=6)
 
@@ -159,7 +167,10 @@ class App:
         self.config["capture_monitor_index"] = int(self.capture_monitor_var.get())
         self.config["output_monitor_index"] = int(self.output_monitor_var.get())
         self.config["debug_enabled"] = bool(self.debug_enabled_var.get())
+        self.config["output_fullscreen"] = bool(self.output_fullscreen_var.get())
         save_json(DEFAULT_CONFIG_PATH, self.config)
+
+        self._recreate_second_screen()
 
         self.capture_worker = ScreenCaptureWorker(
             output_queue=self.frame_queue,
@@ -173,6 +184,20 @@ class App:
         self.status_var.set("Running")
         self.runtime.status = "running"
         self.log_ui("Capture started")
+
+    def _recreate_second_screen(self) -> None:
+        try:
+            if self.second_screen:
+                self.second_screen.stop()
+        except Exception:
+            pass
+        output_idx = min(max(1, int(self.config.get("output_monitor_index", 1))), len(self.monitors))
+        self.second_screen = SecondScreenWindow(
+            self.monitors[output_idx - 1],
+            logger=self.logger,
+            fullscreen=bool(self.config.get("output_fullscreen", False)),
+        )
+        self.second_screen.start()
 
     def pause(self) -> None:
         self.started = False
