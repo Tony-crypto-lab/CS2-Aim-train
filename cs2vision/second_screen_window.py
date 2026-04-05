@@ -54,7 +54,7 @@ class SecondScreenWindow:
 
         self.label = tk.Label(self.window, bg="black")
         self.label.pack(fill="both", expand=True)
-        self._set_image(self._placeholder((w, h), "Waiting for lineup..."))
+        self._set_image(self._placeholder(self._target_size(), "Waiting for lineup..."))
 
         self.window.after(100, self._tick)
 
@@ -96,7 +96,7 @@ class SecondScreenWindow:
             self.window.after(100, self._tick)
 
     def _render_payload(self, payload: dict[str, Any]) -> None:
-        w, h = self.monitor.width, self.monitor.height
+        w, h = self._target_size()
         image_path = payload.get("preview_image")
         info = payload.get("info", {})
         if image_path and Path(image_path).exists():
@@ -119,6 +119,14 @@ class SecondScreenWindow:
         draw.rectangle((10, 10, 530, 180), fill=(0, 0, 0))
         draw.text((20, 20), text, fill=(0, 255, 200))
         self._set_image(img)
+
+    def _target_size(self) -> tuple[int, int]:
+        if self.window is None:
+            return self.monitor.width, self.monitor.height
+        self.window.update_idletasks()
+        w = max(320, int(self.window.winfo_width()))
+        h = max(240, int(self.window.winfo_height()))
+        return w, h
 
     def _set_image(self, img: Image.Image) -> None:
         if not self.label:
